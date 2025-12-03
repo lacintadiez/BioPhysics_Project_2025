@@ -1,5 +1,3 @@
----
-
 # 🧬 Energy Analysis Project (2025–26)
 
 ### **Spike RBD–ACE2 Interface Energy Analysis**
