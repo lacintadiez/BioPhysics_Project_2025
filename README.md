@@ -84,15 +84,16 @@ usage: you must supply a pdb format file
 ```
 ---
 
-### 5. Use included PDB structure
+### 5. Download PDB structure
 
-The repository already provides the **6M0J structure**, including pre-processed files ready for analysis (`6m0j.cif` and `6m0j_fixed.pdb`). All scripts and calculations will use these provided files.
-
+```bash
+wget https://files.rcsb.org/download/6M0J.pdb
+```
 ---
 
 ## 📁 **Input Data**
 
-* **PDB structure:** `6M0J` (provided)
+* **PDB structure:** `6M0J` (provided by the command line above)
 * Contains the SARS-CoV-2 Spike **Receptor Binding Domain (RBD)** bound to **ACE2**.
 
 ---
