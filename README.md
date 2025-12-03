@@ -4,7 +4,7 @@
 
 ## 📌 **Objective**
 
-Evaluate the **relative energetic contribution of protein–protein interface residues** in the SARS-CoV-2 Spike RBD–ACE2 complex, using structure **6M0J** from the Protein Data Bank.
+Evaluate the **relative energetic contribution of protein–protein interface residues** in the SARS-CoV-2 Spike RBD–ACE2 complex, using structure **6M0J**.
 
 Specifically, we analyze:
 
@@ -17,7 +17,7 @@ Specifically, we analyze:
 
 ## 🧠 **Background**
 
-Large-scale sequencing projects are generating vast numbers of protein variants. Many proteins function as **complexes**, and small sequence changes can affect:
+Large-scale sequencing projects generate vast numbers of protein variants. Many proteins function as **complexes**, and small sequence changes can affect:
 
 * Binding affinity
 * Stability
@@ -30,9 +30,69 @@ This project explores how **each interface residue** contributes to the interact
 
 ---
 
+## ⚙️ **Setup Instructions**
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/lacintadiez/BioPhysics_Project_2025.git
+cd BioPhysics_Project_2025
+```
+
+---
+
+### 2. Create and activate a Conda environment
+
+```bash
+conda create -n biophysics_project python=3.10 -y
+conda activate biophysics_project
+```
+
+---
+
+### 3. Install required Python packages
+
+```bash
+# Core Python libraries
+pip install biopython numpy pandas matplotlib jupyter
+
+# Structure checking library
+conda install -c bioconda biobb_structure_checking
+```
+
+---
+
+### 4. Install and test NACCESS
+
+1. Navigate to the NACCESS folder:
+
+```bash
+cd Energy_analysis_project/NACCESS/NACCESS
+chmod +x naccess
+```
+
+2. Test the executable:
+
+```bash
+./naccess -h
+```
+
+You should see a message like:
+
+```
+usage: you must supply a pdb format file
+```
+---
+
+### 5. Use included PDB structure
+
+The repository already provides the **6M0J structure**, including pre-processed files ready for analysis (`6m0j.cif` and `6m0j_fixed.pdb`). All scripts and calculations will use these provided files.
+
+---
+
 ## 📁 **Input Data**
 
-* **PDB structure:** `6M0J`
+* **PDB structure:** `6M0J` (provided)
 * Contains the SARS-CoV-2 Spike **Receptor Binding Domain (RBD)** bound to **ACE2**.
 
 ---
@@ -42,7 +102,7 @@ This project explores how **each interface residue** contributes to the interact
 ## **Step 1 — Identify Interface Residues**
 
 1. Visually inspect the structure using **PyMOL**
-2. Define a cutoff distance for contacts
+2. Define a cutoff distance for contacts:
 
    * Use the closest atom–atom distance observed
    * Add **1–2 Å** to include adjacent residues
@@ -56,8 +116,6 @@ This project explores how **each interface residue** contributes to the interact
 
 ## **Step 2 — Compute Energetic Contributions**
 
-Two approaches:
-
 ### **A. Per-residue interaction energy**
 
 Estimate the energetic contribution of each interface residue to the complex stability (ΔG contribution).
@@ -68,7 +126,7 @@ For each interface residue:
 
 1. Mutate to **Alanine**
 2. Recalculate complex interaction energy
-3. Compute ΔΔG = ΔG_mutant – ΔG_wildtype
+3. Compute ΔΔG = ΔG<sub>mutant</sub> – ΔG<sub>wildtype</sub>
 
 ---
 
@@ -95,24 +153,24 @@ Repeat steps using **FoldX** ([https://foldxsuite.crg.eu/](https://foldxsuite.cr
 
 Using **biobb_structure_checking**:
 
-1. Download 6M0J
+1. Use the provided 6M0J structure
 2. Select the correct biological assembly
 3. Remove heteroatoms
 4. Add:
 
-   * missing side chains
-   * hydrogen atoms
-   * atomic charges
+   * Missing side chains
+   * Hydrogen atoms
+   * Atomic charges
 5. Generate a **prepared PDBQT** file (CMIP-compatible)
 
 ---
----
+
 ## 🛠️ **Tools Used**
 
 * **Python 3**
 * **Biopython** or custom scripts for contact detection
 * **biobb_structure_checking** for model preparation
-* **NACCESS** for ASA calculations *(if used in your scripts)*
+* **NACCESS** for ASA calculations
 * **FoldX** for comparison
 * **PyMOL** for visualization
 
