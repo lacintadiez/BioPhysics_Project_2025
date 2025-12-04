@@ -1,91 +1,81 @@
+
 # 🧬 Energy Analysis Project (2025–26)
 
-### **Spike RBD–ACE2 Interface Energy Analysis**
-
-## 📌 **Objective**
-
-Evaluate the **relative energetic contribution of protein–protein interface residues** in the SARS-CoV-2 Spike RBD–ACE2 complex, using structure **6M0J**.
-
-Specifically, we analyze:
-
-1. **Which residues form the interface**
-2. **Per-residue contribution to binding energy**
-3. **Impact of mutations at interface positions**
-4. **Comparison with FoldX predictions**
+**Spike RBD–ACE2 Interface Energy Analysis**
 
 ---
 
-## 🧠 **Background**
+## 📌 Objective
 
-Large-scale sequencing projects generate vast numbers of protein variants. Many proteins function as **complexes**, and small sequence changes can affect:
+Evaluate the relative energetic contribution of protein–protein interface residues in the SARS-CoV-2 Spike RBD–ACE2 complex, using structure **6M0J**.
+
+Specifically, we analyze:
+
+* Which residues form the interface
+* Per-residue contribution to binding energy
+* Impact of mutations at interface positions
+* Comparison with FoldX predictions
+
+---
+
+## 🧠 Background
+
+Large-scale sequencing projects generate many protein variants. Many proteins function as complexes, and small sequence changes can affect:
 
 * Binding affinity
 * Stability
 * Regulation
-* Viral infectivity (in the case of SARS-CoV-2)
+* Viral infectivity (for SARS-CoV-2)
 
-The Spike RBD–ACE2 interaction is a key step in the SARS-CoV-2 infection mechanism, targeted by most vaccines and neutralizing antibodies.
-
-This project explores how **each interface residue** contributes to the interaction energy, and how mutations might disrupt or enhance binding.
+The Spike RBD–ACE2 interaction is a key step in viral infection, targeted by vaccines and neutralizing antibodies. This project explores how interface residues contribute to interaction energy, and how mutations may disrupt or enhance binding.
 
 ---
 
-## ⚙️ **Setup Instructions**
+## ⚙️ Setup Instructions
 
-### 1. Clone the repository
+1. **Clone the repository**
 
 ```bash
 git clone https://github.com/lacintadiez/BioPhysics_Project_2025.git
 cd BioPhysics_Project_2025
 ```
 
----
-
-### 2. Create and activate a Conda environment
+2. **Create and activate a Conda environment**
 
 ```bash
 conda create -n biophysics_project python=3.10 -y
 conda activate biophysics_project
 ```
 
----
-
-### 3. Install required Python packages
+3. **Install required Python packages**
 
 ```bash
-# Core Python libraries
+# Core libraries
 pip install biopython numpy pandas matplotlib jupyter
 
 # Structure checking library
 conda install -c bioconda biobb_structure_checking
 ```
 
----
+4. **Install ipykernel for Jupyter**
 
-### 4. Install ipykernel for Jupyter
 ```bash
 conda install ipykernel
 # or
 pip install ipykernel
 ```
-#### Then register the environment with Jupyter:
+
+Then register the environment with Jupyter:
+
 ```bash
 python -m ipykernel install --user --name biophysics_project --display-name "Python (biophysics_project)"
 ```
 
----
-### 5. Install and test NACCESS
-
-1. Navigate to the NACCESS folder:
+5. **Install and test NACCESS**
 
 ```bash
 cd Energy_analysis_project/NACCESS/NACCESS
 chmod +x naccess
-```
-
-2. Test the executable:
-
-```bash
 ./naccess -h
 ```
 
@@ -94,106 +84,108 @@ You should see a message like:
 ```
 usage: you must supply a pdb format file
 ```
----
 
-### 6. Download PDB structure
+6. **Download PDB structure**
 
 ```bash
 wget https://files.rcsb.org/download/6M0J.pdb
 ```
----
-
-## 📁 **Input Data**
-
-* **PDB structure:** `6M0J` (provided by the command line above)
-* Contains the SARS-CoV-2 Spike **Receptor Binding Domain (RBD)** bound to **ACE2**.
 
 ---
 
-# 🔬 **Project Workflow**
+## 📁 Input Data
 
-## **Step 1 — Identify Interface Residues**
-
-1. Visually inspect the structure using **PyMOL**
-2. Define a cutoff distance for contacts:
-
-   * Use the closest atom–atom distance observed
-   * Add **1–2 Å** to include adjacent residues
-3. Write a **Python script** that:
-
-   * Reads the PDB
-   * Computes interatomic distances
-   * Outputs a list of **interface residues** for each chain
+* **PDB structure:** 6M0J
+* Contains the SARS-CoV-2 Spike Receptor Binding Domain (RBD) bound to ACE2.
 
 ---
 
-## **Step 2 — Compute Energetic Contributions**
+## 🔬 Project Workflow
 
-### **A. Per-residue interaction energy**
+### **Step 1 — Identify Interface Residues**
 
-Estimate the energetic contribution of each interface residue to the complex stability (ΔG contribution).
+1. Visually inspect the structure in PyMOL or Chimera.
+2. Define a contact distance threshold (closest atom–atom distance + 1–2 Å).
+3. Use Python scripts to:
 
-### **B. Alanine scanning (in silico)**
+   * Read the PDB
+   * Compute interatomic distances
+   * Output interface residues for each chain
 
-For each interface residue:
-
-1. Mutate to **Alanine**
-2. Recalculate complex interaction energy
-3. Compute ΔΔG = ΔG<sub>mutant</sub> – ΔG<sub>wildtype</sub>
-
----
-
-## **Step 3 — Analyze Spike Variants**
-
-1. Identify known SARS-CoV-2 Spike mutations located in the RBD
-2. Introduce mutations into the structure (one at a time)
-3. Recompute the interaction energy
-4. Compare the energetic impact with WT and Ala-scan results
+**Output:** List of interface residues.
 
 ---
 
-## **Step 4 — FoldX Comparison**
+### **Step 2 — Compute Energetic Contributions**
 
-Repeat steps using **FoldX** ([https://foldxsuite.crg.eu/](https://foldxsuite.crg.eu/)) and evaluate:
+#### A. Per-residue interaction energy
 
-* Agreement between methods
-* Differences in predicted ΔΔG
-* Possible sources of error or bias
+* Calculate ΔG contribution of each interface residue to complex stability.
+
+#### B. Alanine scanning (in silico)
+
+* For each interface residue:
+
+  * Mutate to Ala
+  * Recompute interaction energy
+  * Compute ΔΔG = ΔGmutant – ΔGwildtype
+
+**Output:** Ala-scan ΔΔG profile.
 
 ---
 
-## ⚙️ **Structure Preparation Pipeline**
+### **Step 3 — Analyze Spike Variants**
+
+* Identify known SARS-CoV-2 RBD mutations.
+* Introduce mutations into the structure, one at a time.
+* Recompute interaction energy.
+* Compare with WT and Ala-scan results.
+
+---
+
+### **Step 4 — FoldX Comparison**
+
+* Repeat Steps 2–3 using FoldX.
+* Compare ΔΔG predictions between methods.
+* Assess agreement, differences, and potential sources of error.
+
+---
+
+## ⚙️ Structure Preparation Pipeline
 
 Using **biobb_structure_checking**:
 
-1. Use the provided 6M0J structure
-2. Select the correct biological assembly
-3. Remove heteroatoms
+1. Use the provided 6M0J structure.
+2. Select the correct biological assembly.
+3. Remove heteroatoms (water, metals, ligands, hydrogens).
 4. Add:
 
    * Missing side chains
    * Hydrogen atoms
    * Atomic charges
-5. Generate a **prepared PDBQT** file (CMIP-compatible)
+
+> **Note:** PDBQT generation is attempted, but due to software limitations, we use the **provided reference files** for downstream analyses to ensure consistency.
+
+**Output:** Cleaned PDB
 
 ---
 
-## 🛠️ **Tools Used**
+## 🛠️ Tools Used
 
-* **Python 3**
-* **Biopython** or custom scripts for contact detection
-* **biobb_structure_checking** for model preparation
-* **NACCESS** for ASA calculations
-* **FoldX** for comparison
-* **PyMOL** for visualization
+* Python 3 + Biopython
+* Custom Python scripts for contact detection
+* biobb_structure_checking for structure preparation
+* NACCESS for accessible surface area (ASA) calculations
+* FoldX for comparison
+* PyMOL for visualization
 
 ---
 
-## 📤 **Expected Outputs**
+## 📤 Expected Outputs
 
 * List of interface residues (per chain)
 * Per-residue interaction energy
-* Alanine-scanning ΔΔG profile
+* Alanine scanning ΔΔG profile
 * Variant impact analysis (ΔΔG)
 * Comparison plots between methods
 * Summary table of energetically important interface residues
