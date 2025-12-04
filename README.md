@@ -62,7 +62,19 @@ conda install -c bioconda biobb_structure_checking
 
 ---
 
-### 4. Install and test NACCESS
+### 4. Install ipykernel for Jupyter
+```bash
+conda install ipykernel
+# or
+pip install ipykernel
+```
+#### Then register the environment with Jupyter:
+```bash
+python -m ipykernel install --user --name biophysics_project --display-name "Python (biophysics_project)"
+```
+
+---
+### 5. Install and test NACCESS
 
 1. Navigate to the NACCESS folder:
 
@@ -84,7 +96,7 @@ usage: you must supply a pdb format file
 ```
 ---
 
-### 5. Download PDB structure
+### 6. Download PDB structure
 
 ```bash
 wget https://files.rcsb.org/download/6M0J.pdb
