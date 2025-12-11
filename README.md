@@ -11,10 +11,10 @@ Evaluate the relative energetic contribution of protein–protein interface resi
 
 Specifically, we analyze:
 
-* Which residues form the interface
-* Per-residue contribution to binding energy
-* Impact of mutations at interface positions
-* Comparison with FoldX predictions
+* Which residues form the interface  
+* Per-residue contribution to binding energy  
+* Impact of mutations at interface positions  
+* Comparison with FoldX predictions  
 
 ---
 
@@ -22,10 +22,10 @@ Specifically, we analyze:
 
 Large-scale sequencing projects generate many protein variants. Many proteins function as complexes, and small sequence changes can affect:
 
-* Binding affinity
-* Stability
-* Regulation
-* Viral infectivity (for SARS-CoV-2)
+* Binding affinity  
+* Stability  
+* Regulation  
+* Viral infectivity (for SARS-CoV-2)  
 
 The Spike RBD–ACE2 interaction is a key step in viral infection, targeted by vaccines and neutralizing antibodies. This project explores how interface residues contribute to interaction energy, and how mutations may disrupt or enhance binding.
 
@@ -95,7 +95,7 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ## 📁 Input Data
 
-* **PDB structure:** 6M0J
+* **PDB structure:** 6M0J  
 * Contains the SARS-CoV-2 Spike Receptor Binding Domain (RBD) bound to ACE2.
 
 ---
@@ -104,13 +104,12 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ### **Step 1 — Identify Interface Residues**
 
-1. Visually inspect the structure in PyMOL or Chimera.
-2. Define a contact distance threshold (closest atom–atom distance + 1–2 Å).
-3. Use Python scripts to:
-
-   * Read the PDB
-   * Compute interatomic distances
-   * Output interface residues for each chain
+1. Visually inspect the structure in PyMOL or Chimera.  
+2. Define a contact distance threshold (closest atom–atom distance + 1–2 Å).  
+3. Use Python scripts to:  
+   * Read the PDB  
+   * Compute interatomic distances  
+   * Output interface residues for each chain  
 
 **Output:** List of interface residues.
 
@@ -118,36 +117,60 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ### **Step 2 — Compute Energetic Contributions**
 
-#### A. Per-residue interaction energy
+#### Step 2.1 — Imports and Setup
+* Parse cleaned PDB and PDBQT files.  
+* Attach charges, atom types, vdW parameters.  
+* Run NACCESS to compute ASA for complex and isolated chains.  
 
-* Calculate ΔG contribution of each interface residue to complex stability.
+#### Step 2.2 — Energy Functions
+* Implement Mehler–Solmajer dielectric.  
+* Define electrostatics and Lennard-Jones vdW functions.  
 
-#### B. Alanine scanning (in silico)
+#### Step 2.3 — Interface Detection
+* Use `NeighborSearch` with cutoff (5 Å) to identify contacting residues.  
 
-* For each interface residue:
+#### Step 2.4 — Atom–Atom Interaction
+* Compute cross-chain pair energies with single-pass loop (no double-counting).  
 
-  * Mutate to Ala
-  * Recompute interaction energy
-  * Compute ΔΔG = ΔGmutant – ΔGwildtype
+#### Step 2.5 — Solvation Definition
+* Compute solvation energies from ASA × fsrf for complex and isolated chains.  
 
-**Output:** Ala-scan ΔΔG profile.
+#### Step 2.6 — Per-Residue Contributions
+* Calculate E, V, solvation difference, and ΔG_res for each interface residue.  
+
+#### Step 2.7 — Table of Most Relevant Interactions
+* Output top residues ranked by |ΔG_res| with detailed breakdown.  
+
+#### Step 2.8 — Plotting Results
+* Generate stacked bar plots showing per-residue contributions (Electrostatics, vdW, Solvation).  
+
+#### Step 2.9 — Classification of Interactions
+* Identify hotspots by type:  
+  * Electrostatic (salt bridges)  
+  * vdW (hydrophobic packing, aromatic stacking)  
+  * Solvation (burial/exposure effects)  
+
+**Output:**  
+* Total ΔG of interface (≈ −55 kcal/mol, vdW-dominated).  
+* Per-residue table and plots.  
+* Hotspot classification.
 
 ---
 
 ### **Step 3 — Analyze Spike Variants**
 
-* Identify known SARS-CoV-2 RBD mutations.
-* Introduce mutations into the structure, one at a time.
-* Recompute interaction energy.
-* Compare with WT and Ala-scan results.
+* Identify known SARS-CoV-2 RBD mutations.  
+* Introduce mutations into the structure, one at a time.  
+* Recompute interaction energy.  
+* Compare with WT and Ala-scan results.  
 
 ---
 
 ### **Step 4 — FoldX Comparison**
 
-* Repeat Steps 2–3 using FoldX.
-* Compare ΔΔG predictions between methods.
-* Assess agreement, differences, and potential sources of error.
+* Repeat Steps 2–3 using FoldX.  
+* Compare ΔΔG predictions between methods.  
+* Assess agreement, differences, and potential sources of error.  
 
 ---
 
@@ -155,14 +178,13 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 Using **biobb_structure_checking**:
 
-1. Use the provided 6M0J structure.
-2. Select the correct biological assembly.
-3. Remove heteroatoms (water, metals, ligands, hydrogens).
-4. Add:
-
-   * Missing side chains
-   * Hydrogen atoms
-   * Atomic charges
+1. Use the provided 6M0J structure.  
+2. Select the correct biological assembly.  
+3. Remove heteroatoms (water, metals, ligands, hydrogens).  
+4. Add:  
+   * Missing side chains  
+   * Hydrogen atoms  
+   * Atomic charges  
 
 > **Note:** PDBQT generation is attempted, but due to software limitations, we use the **provided reference files** for downstream analyses to ensure consistency.
 
@@ -172,22 +194,25 @@ Using **biobb_structure_checking**:
 
 ## 🛠️ Tools Used
 
-* Python 3 + Biopython
-* Custom Python scripts for contact detection
-* biobb_structure_checking for structure preparation
-* NACCESS for accessible surface area (ASA) calculations
-* FoldX for comparison
-* PyMOL for visualization
+* Python 3 + Biopython  
+* Custom Python scripts for contact detection and energy decomposition  
+* biobb_structure_checking for structure preparation  
+* NACCESS for accessible surface area (ASA) calculations  
+* FoldX for comparison  
+* PyMOL for visualization  
 
 ---
 
 ## 📤 Expected Outputs
 
-* List of interface residues (per chain)
-* Per-residue interaction energy
-* Alanine scanning ΔΔG profile
-* Variant impact analysis (ΔΔG)
-* Comparison plots between methods
-* Summary table of energetically important interface residues
+* List of interface residues (per chain)  
+* Per-residue interaction energy table and plots  
+* Alanine scanning ΔΔG profile  
+* Variant impact analysis (ΔΔG)  
+* Comparison plots between methods  
+* Summary table of energetically important interface residues  
 
 ---
+
+
+
