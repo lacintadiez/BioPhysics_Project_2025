@@ -218,6 +218,43 @@ Using **biobb_structure_checking**:
 **Output:** Cleaned PDB (`6m0j_fixed_step1.pdb`) ready for energy analysis.
 
 ---
+# Step 4: Interface Visualization with PyMOL
+
+In this step, PyMOL was used to generate visual representations of the RBD–ACE2 interface, highlighting the most relevant residues and interactions affected by the mutations.
+
+## Visualization Strategy
+
+Several images were prepared to clearly illustrate the role of key residues at the interface:
+
+1. **All Relevant Residues Together**  
+   - All mutated and energetically relevant residues were displayed simultaneously at the RBD–ACE2 interface.
+   - This view provides a global overview of the spatial distribution of important residues involved in binding and stability.
+
+2. **Hotspot Residues**  
+   - Hotspot residues were highlighted separately to emphasize regions with a strong energetic contribution.
+   - Color code:
+     - **Strong hotspots:** red  
+     - **Moderate hotspots:** orange  
+
+3. **Stabilizing Residues**  
+   - Residues with a stabilizing energetic effect were visualized independently.
+   - Color code:
+     - **Strong stabilizers:** dark green  
+     - **Moderate stabilizers:** orange  
+
+4. **Destabilizing Residues**  
+   - Residues with a destabilizing energetic effect were displayed in a separate view.
+   - These residues highlight regions where mutations may reduce local stability or alter interactions at the interface.
+
+## Representation Details
+
+- The RBD–ACE2 interface was shown using surface and cartoon representations to clearly visualize contacts.
+- Relevant residues were displayed as sticks and colored according to their energetic classification.
+- These images allow an intuitive interpretation of how specific mutations and residues contribute to stabilization, destabilization, or hotspot formation at the interface.
+
+
+
+---
 
 # **Step 5 : Build Mutated RBD Structures**
 
