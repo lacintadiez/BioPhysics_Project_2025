@@ -18,7 +18,7 @@ Specifically, we analyze:
 
 ---
 
-## 🧠 Background
+## Background
 
 Large-scale sequencing projects generate many protein variants. Many proteins function as complexes, and small sequence changes can affect:
 
@@ -217,8 +217,7 @@ Using **biobb_structure_checking**:
 
 **Output:** Cleaned PDB (`6m0j_fixed_step1.pdb`) ready for energy analysis.
 
----
-# Step 4: Interface Visualization with PyMOL
+## Interface Visualization with PyMOL
 
 In this step, PyMOL was used to generate visual representations of the RBD–ACE2 interface, highlighting the most relevant residues and interactions affected by the mutations.
 
@@ -256,7 +255,7 @@ Several images were prepared to clearly illustrate the role of key residues at t
 
 ---
 
-# **Step 5 : Build Mutated RBD Structures**
+## **Step 5 : Build Mutated RBD Structures**
 
 In this step, the mutations of SARS-CoV-2 RBD variants (Alpha, Beta, Delta) were modeled using **PyMOL** to generate structures with replaced side chains for energy analysis.
 
