@@ -219,6 +219,34 @@ Using **biobb_structure_checking**:
 
 ---
 
+# **Step 5 : Build Mutated RBD Structures**
+
+In this step, the mutations of SARS-CoV-2 RBD variants (Alpha, Beta, Delta) were modeled using **PyMOL** to generate structures with replaced side chains for energy analysis.
+
+## Known RBD Mutations by Variant
+
+- **Alpha (B.1.1.7):** N501Y, A570D, P681H
+- **Beta (B.1.351):** K417N, E484K, N501Y
+- **Delta (B.1.617.2):** L452R, T478K, P681R
+
+## Mutations Used in This Step
+
+Only the mutations present in our dataset were modeled:
+
+- **Alpha:** N501Y → Asparagine (N) replaced by Tyrosine (Y), introducing a larger aromatic side chain that may affect local stability and ACE2 binding.
+- **Beta:** K417N → Lysine (K) to Asparagine (N), changing a positively charged residue to a polar uncharged residue.
+- **Beta:** E484K → Glutamic acid (E) to Lysine (K), changing a negatively charged residue to a positive one, potentially affecting ACE2 and antibody interactions.
+- **Beta:** N501Y → Asparagine (N) to Tyrosine (Y), same as in Alpha.
+- **Delta:** T478K → Threonine (T) to Lysine (K), introducing a positive charge in the binding interface.
+
+## Procedure in PyMOL
+
+1. Load the wild-type RBD structure.
+2. Use the **Mutagenesis Wizard** to replace each residue with the corresponding mutant, selecting the optimal rotamer.
+
+**Note:** Other characteristic mutations of these variants (A570D, P681H/R, L452R) were not included because they are not present in the analyzed dataset. Alternative tools like `biobb_structure_checking` could automate this process.
+
+---
 ## 🛠️ Tools Used
 
 * Python 3 + Biopython
