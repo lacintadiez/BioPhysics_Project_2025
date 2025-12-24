@@ -194,11 +194,8 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ---
 
-### **Step 4 — FoldX Comparison**
+### **Step 4 — PyMOL images**
 
-* Repeat Steps 2–3 using FoldX.
-* Compare ΔΔG predictions between methods.
-* Evaluate agreement and discuss potential sources of differences.
 
 ---
 
@@ -228,7 +225,6 @@ Using **biobb_structure_checking**:
 * Custom Python scripts for contact detection, energy decomposition, alanine scanning
 * **biobb_structure_checking** for structure preparation
 * **NACCESS** for ASA calculations
-* **FoldX** for comparison
 * PyMOL for visualization
 * Matplotlib/Seaborn for plotting
 
