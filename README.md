@@ -1,4 +1,3 @@
-
 # 🧬 Energy Analysis Project (2025–26)
 
 **Spike RBD–ACE2 Interface Energy Analysis**
@@ -11,21 +10,22 @@ Evaluate the relative energetic contribution of protein–protein interface resi
 
 Specifically, we analyze:
 
-* Which residues form the interface  
-* Per-residue contribution to binding energy  
-* Impact of mutations at interface positions  
-* Comparison with FoldX predictions  
+* Which residues form the interface
+* Per-residue contribution to binding energy
+* Impact of mutations at interface positions
+* Alanine scanning to identify hotspots and stabilizers
+* Comparison with FoldX predictions
 
 ---
 
-## 🧠 Background
+## Background
 
 Large-scale sequencing projects generate many protein variants. Many proteins function as complexes, and small sequence changes can affect:
 
-* Binding affinity  
-* Stability  
-* Regulation  
-* Viral infectivity (for SARS-CoV-2)  
+* Binding affinity
+* Stability
+* Regulation
+* Viral infectivity (for SARS-CoV-2)
 
 The Spike RBD–ACE2 interaction is a key step in viral infection, targeted by vaccines and neutralizing antibodies. This project explores how interface residues contribute to interaction energy, and how mutations may disrupt or enhance binding.
 
@@ -51,7 +51,7 @@ conda activate biophysics_project
 
 ```bash
 # Core libraries
-pip install biopython numpy pandas matplotlib jupyter
+pip install biopython numpy pandas matplotlib jupyter seaborn
 
 # Structure checking library
 conda install -c bioconda biobb_structure_checking
@@ -95,124 +95,213 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ## 📁 Input Data
 
-* **PDB structure:** 6M0J  
+* **PDB structure:** 6M0J
 * Contains the SARS-CoV-2 Spike Receptor Binding Domain (RBD) bound to ACE2.
 
 ---
 
 ## 🔬 Project Workflow
 
-### **Step 1 — Identify Interface Residues**
+### **Step 1 — Structure Preparation & Interface Identification**
 
-1. Visually inspect the structure in PyMOL or Chimera.  
-2. Define a contact distance threshold (closest atom–atom distance + 1–2 Å).  
-3. Use Python scripts to:  
-   * Read the PDB  
-   * Compute interatomic distances  
-   * Output interface residues for each chain  
+1. Use **biobb_structure_checking** to clean the structure:
 
-**Output:** List of interface residues.
+   * Remove waters, metals, ligands, and redundant hydrogens
+   * Fix missing side chains, backbone, and amides
+   * Add hydrogens and charges
+
+2. Visual inspection in PyMOL or Chimera for verification.
+
+3. Define a contact distance threshold (closest atom–atom distance + 1–2 Å).
+
+4. Use Python scripts to:
+
+   * Read the cleaned PDB
+   * Compute interatomic distances
+   * Identify interface residues for chains A and E
+
+**Output:** Cleaned PDB (`6m0j_fixed_step1.pdb`) and list of interface residues.
 
 ---
 
 ### **Step 2 — Compute Energetic Contributions**
 
 #### Step 2.1 — Imports and Setup
-* Parse cleaned PDB and PDBQT files.  
-* Attach charges, atom types, vdW parameters.  
-* Run NACCESS to compute ASA for complex and isolated chains.  
+
+* Parse cleaned PDB and PDBQT files.
+* Assign atom types, charges, and vdW parameters.
+* Run NACCESS to compute ASA for complex and isolated chains.
 
 #### Step 2.2 — Energy Functions
-* Implement Mehler–Solmajer dielectric.  
-* Define electrostatics and Lennard-Jones vdW functions.  
+
+* Mehler–Solmajer dielectric for electrostatics.
+* Lennard-Jones potential for van der Waals.
+* Solvation energies from ASA × solvation parameter.
 
 #### Step 2.3 — Interface Detection
-* Use `NeighborSearch` with cutoff (5 Å) to identify contacting residues.  
+
+* `NeighborSearch` with cutoff (5 Å) to detect contacting residues.
 
 #### Step 2.4 — Atom–Atom Interaction
-* Compute cross-chain pair energies with single-pass loop (no double-counting).  
 
-#### Step 2.5 — Solvation Definition
-* Compute solvation energies from ASA × fsrf for complex and isolated chains.  
+* Compute cross-chain pairwise energies, avoiding double-counting.
 
-#### Step 2.6 — Per-Residue Contributions
-* Calculate E, V, solvation difference, and ΔG_res for each interface residue.  
+#### Step 2.5 — Per-Residue Contributions
 
-#### Step 2.7 — Table of Most Relevant Interactions
-* Output top residues ranked by |ΔG_res| with detailed breakdown.  
+* Calculate:
 
-#### Step 2.8 — Plotting Results
-* Generate stacked bar plots showing per-residue contributions (Electrostatics, vdW, Solvation).  
+  * Electrostatics (E)
+  * van der Waals (V)
+  * Solvation ΔG
+  * Total ΔG_res per residue
 
-#### Step 2.9 — Classification of Interactions
-* Identify hotspots by type:  
-  * Electrostatic (salt bridges)  
-  * vdW (hydrophobic packing, aromatic stacking)  
-  * Solvation (burial/exposure effects)  
+#### Step 2.6 — Plotting and Classification
 
-**Output:**  
-* Total ΔG of interface (≈ −55 kcal/mol, vdW-dominated).  
-* Per-residue table and plots.  
-* Hotspot classification.
+* Stacked bar plots of per-residue energy components.
+* Classify interface residues as hotspots (strong contributors) or stabilizers:
 
----
+  * Electrostatics (salt bridges)
+  * vdW (hydrophobic packing, aromatic stacking)
+  * Solvation effects
 
-### **Step 3 — Analyze Spike Variants**
+**Output:**
 
-* Identify known SARS-CoV-2 RBD mutations.  
-* Introduce mutations into the structure, one at a time.  
-* Recompute interaction energy.  
-* Compare with WT and Ala-scan results.  
+* Total ΔG of interface (~ −55 kcal/mol, vdW-dominated)
+* Per-residue energy table and plots
+* Hotspot classification
 
 ---
 
-### **Step 4 — FoldX Comparison**
+### **Step 3 — Alanine Scanning and Variant Analysis**
 
-* Repeat Steps 2–3 using FoldX.  
-* Compare ΔΔG predictions between methods.  
-* Assess agreement, differences, and potential sources of error.  
+* For each interface residue:
+
+  * Mutate to alanine, keeping backbone and CB atom
+  * Recompute interaction energies
+  * Calculate ΔΔG = WT − Ala
+
+* Identify key stabilizers and hotspots.
+
+* Analyze known SARS-CoV-2 RBD variants:
+
+  * Introduce mutations individually
+  * Recompute ΔΔG and compare to WT and alanine scan
+
+**Output:**
+
+* ΔΔG profile for all interface residues
+* Variant impact analysis plots and tables
 
 ---
 
-## ⚙️ Structure Preparation Pipeline
+### **Step 4 — PyMOL images**
+
+
+---
+
+### ⚙️ Structure Preparation Pipeline
 
 Using **biobb_structure_checking**:
 
-1. Use the provided 6M0J structure.  
-2. Select the correct biological assembly.  
-3. Remove heteroatoms (water, metals, ligands, hydrogens).  
-4. Add:  
-   * Missing side chains  
-   * Hydrogen atoms  
-   * Atomic charges  
+1. Input: 6M0J PDB
+2. Select the biological assembly
+3. Remove heteroatoms (waters, metals, ligands)
+4. Add:
 
-> **Note:** PDBQT generation is attempted, but due to software limitations, we use the **provided reference files** for downstream analyses to ensure consistency.
+   * Missing side chains
+   * Hydrogen atoms
+   * Atomic charges
+5. Clean and verify structure with backup file
 
-**Output:** Cleaned PDB
+> **Note:** PDBQT generation is optional; reference PDBQT files are provided for downstream analyses to maintain consistency.
+
+**Output:** Cleaned PDB (`6m0j_fixed_step1.pdb`) ready for energy analysis.
+
+### Interface Visualization with PyMOL
+
+In this step, PyMOL was used to generate visual representations of the RBD–ACE2 interface, highlighting the most relevant residues and interactions affected by the mutations.
+
+### Visualization Strategy
+
+Several images were prepared to clearly illustrate the role of key residues at the interface:
+
+1. **All Relevant Residues Together**  
+   - All mutated and energetically relevant residues were displayed simultaneously at the RBD–ACE2 interface.
+   - This view provides a global overview of the spatial distribution of important residues involved in binding and stability.
+
+2. **Hotspot Residues**  
+   - Hotspot residues were highlighted separately to emphasize regions with a strong energetic contribution.
+   - Color code:
+     - **Strong hotspots:** red  
+     - **Moderate hotspots:** orange  
+
+3. **Stabilizing Residues**  
+   - Residues with a stabilizing energetic effect were visualized independently.
+   - Color code:
+     - **Strong stabilizers:** dark green  
+     - **Moderate stabilizers:** orange  
+
+4. **Destabilizing Residues**  
+   - Residues with a destabilizing energetic effect were displayed in a separate view (yellow)
+   - These residues highlight regions where mutations may reduce local stability or alter interactions at the interface.
+
+### Representation Details
+
+- The RBD–ACE2 interface was shown using surface and cartoon representations to clearly visualize contacts.
+- Relevant residues were displayed as sticks and colored according to their energetic classification.
+- These images allow an intuitive interpretation of how specific mutations and residues contribute to stabilization, destabilization, or hotspot formation at the interface.
+
+
 
 ---
 
+## **Step 5 : Build Mutated RBD Structures**
+
+In this step, the mutations of SARS-CoV-2 RBD variants (Alpha, Beta, Delta) were modeled using **PyMOL** to generate structures with replaced side chains for energy analysis.
+
+### Known RBD Mutations by Variant
+
+- **Alpha (B.1.1.7):** N501Y, A570D, P681H
+- **Beta (B.1.351):** K417N, E484K, N501Y
+- **Delta (B.1.617.2):** L452R, T478K, P681R
+
+### Mutations Used in This Step
+
+Only the mutations present in our dataset were modeled:
+
+- **Alpha:** N501Y → Asparagine (N) replaced by Tyrosine (Y), introducing a larger aromatic side chain that may affect local stability and ACE2 binding.
+- **Beta:** K417N → Lysine (K) to Asparagine (N), changing a positively charged residue to a polar uncharged residue.
+- **Beta:** E484K → Glutamic acid (E) to Lysine (K), changing a negatively charged residue to a positive one, potentially affecting ACE2 and antibody interactions.
+- **Beta:** N501Y → Asparagine (N) to Tyrosine (Y), same as in Alpha.
+- **Delta:** T478K → Threonine (T) to Lysine (K), introducing a positive charge in the binding interface.
+
+### Procedure in PyMOL
+
+1. Load the wild-type RBD structure.
+2. Use the **Mutagenesis Wizard** to replace each residue with the corresponding mutant, selecting the optimal rotamer.
+
+**Note:** Other characteristic mutations of these variants (A570D, P681H/R, L452R) were not included because they are not present in the analyzed dataset. Alternative tools like `biobb_structure_checking` could automate this process.
+
+---
 ## 🛠️ Tools Used
 
-* Python 3 + Biopython  
-* Custom Python scripts for contact detection and energy decomposition  
-* biobb_structure_checking for structure preparation  
-* NACCESS for accessible surface area (ASA) calculations  
-* FoldX for comparison  
-* PyMOL for visualization  
+* Python 3 + Biopython
+* Custom Python scripts for contact detection, energy decomposition, alanine scanning
+* **biobb_structure_checking** for structure preparation
+* **NACCESS** for ASA calculations
+* PyMOL for visualization
+* Matplotlib/Seaborn for plotting
 
 ---
 
 ## 📤 Expected Outputs
 
-* List of interface residues (per chain)  
-* Per-residue interaction energy table and plots  
-* Alanine scanning ΔΔG profile  
-* Variant impact analysis (ΔΔG)  
-* Comparison plots between methods  
-* Summary table of energetically important interface residues  
+* Cleaned and verified PDB files
+* List of interface residues per chain
+* Per-residue interaction energy tables
+* Alanine scanning ΔΔG profiles
+* Variant impact ΔΔG analysis
+* Classification of hotspots and stabilizers
+* Comparison plots and tables with FoldX predictions
 
 ---
-
-
-
