@@ -18,7 +18,7 @@ Specifically, we analyze:
 
 ---
 
-## 🧠 Background
+## Background
 
 Large-scale sequencing projects generate many protein variants. Many proteins function as complexes, and small sequence changes can affect:
 
@@ -194,15 +194,12 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ---
 
-### **Step 4 — FoldX Comparison**
+### **Step 4 — PyMOL images**
 
-* Repeat Steps 2–3 using FoldX.
-* Compare ΔΔG predictions between methods.
-* Evaluate agreement and discuss potential sources of differences.
 
 ---
 
-## ⚙️ Structure Preparation Pipeline
+### ⚙️ Structure Preparation Pipeline
 
 Using **biobb_structure_checking**:
 
@@ -220,15 +217,78 @@ Using **biobb_structure_checking**:
 
 **Output:** Cleaned PDB (`6m0j_fixed_step1.pdb`) ready for energy analysis.
 
+### Interface Visualization with PyMOL
+
+In this step, PyMOL was used to generate visual representations of the RBD–ACE2 interface, highlighting the most relevant residues and interactions affected by the mutations.
+
+### Visualization Strategy
+
+Several images were prepared to clearly illustrate the role of key residues at the interface:
+
+1. **All Relevant Residues Together**  
+   - All mutated and energetically relevant residues were displayed simultaneously at the RBD–ACE2 interface.
+   - This view provides a global overview of the spatial distribution of important residues involved in binding and stability.
+
+2. **Hotspot Residues**  
+   - Hotspot residues were highlighted separately to emphasize regions with a strong energetic contribution.
+   - Color code:
+     - **Strong hotspots:** red  
+     - **Moderate hotspots:** orange  
+
+3. **Stabilizing Residues**  
+   - Residues with a stabilizing energetic effect were visualized independently.
+   - Color code:
+     - **Strong stabilizers:** dark green  
+     - **Moderate stabilizers:** orange  
+
+4. **Destabilizing Residues**  
+   - Residues with a destabilizing energetic effect were displayed in a separate view (yellow)
+   - These residues highlight regions where mutations may reduce local stability or alter interactions at the interface.
+
+### Representation Details
+
+- The RBD–ACE2 interface was shown using surface and cartoon representations to clearly visualize contacts.
+- Relevant residues were displayed as sticks and colored according to their energetic classification.
+- These images allow an intuitive interpretation of how specific mutations and residues contribute to stabilization, destabilization, or hotspot formation at the interface.
+
+
+
 ---
 
+## **Step 5 : Build Mutated RBD Structures**
+
+In this step, the mutations of SARS-CoV-2 RBD variants (Alpha, Beta, Delta) were modeled using **PyMOL** to generate structures with replaced side chains for energy analysis.
+
+### Known RBD Mutations by Variant
+
+- **Alpha (B.1.1.7):** N501Y, A570D, P681H
+- **Beta (B.1.351):** K417N, E484K, N501Y
+- **Delta (B.1.617.2):** L452R, T478K, P681R
+
+### Mutations Used in This Step
+
+Only the mutations present in our dataset were modeled:
+
+- **Alpha:** N501Y → Asparagine (N) replaced by Tyrosine (Y), introducing a larger aromatic side chain that may affect local stability and ACE2 binding.
+- **Beta:** K417N → Lysine (K) to Asparagine (N), changing a positively charged residue to a polar uncharged residue.
+- **Beta:** E484K → Glutamic acid (E) to Lysine (K), changing a negatively charged residue to a positive one, potentially affecting ACE2 and antibody interactions.
+- **Beta:** N501Y → Asparagine (N) to Tyrosine (Y), same as in Alpha.
+- **Delta:** T478K → Threonine (T) to Lysine (K), introducing a positive charge in the binding interface.
+
+### Procedure in PyMOL
+
+1. Load the wild-type RBD structure.
+2. Use the **Mutagenesis Wizard** to replace each residue with the corresponding mutant, selecting the optimal rotamer.
+
+**Note:** Other characteristic mutations of these variants (A570D, P681H/R, L452R) were not included because they are not present in the analyzed dataset. Alternative tools like `biobb_structure_checking` could automate this process.
+
+---
 ## 🛠️ Tools Used
 
 * Python 3 + Biopython
 * Custom Python scripts for contact detection, energy decomposition, alanine scanning
 * **biobb_structure_checking** for structure preparation
 * **NACCESS** for ASA calculations
-* **FoldX** for comparison
 * PyMOL for visualization
 * Matplotlib/Seaborn for plotting
 
@@ -242,6 +302,6 @@ Using **biobb_structure_checking**:
 * Alanine scanning ΔΔG profiles
 * Variant impact ΔΔG analysis
 * Classification of hotspots and stabilizers
-* Comparison plots and tables with FoldX predictions
+* Comparison plots and tables
 
 ---
