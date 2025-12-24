@@ -199,7 +199,7 @@ wget https://files.rcsb.org/download/6M0J.pdb
 
 ---
 
-## ⚙️ Structure Preparation Pipeline
+### ⚙️ Structure Preparation Pipeline
 
 Using **biobb_structure_checking**:
 
@@ -217,11 +217,11 @@ Using **biobb_structure_checking**:
 
 **Output:** Cleaned PDB (`6m0j_fixed_step1.pdb`) ready for energy analysis.
 
-## Interface Visualization with PyMOL
+### Interface Visualization with PyMOL
 
 In this step, PyMOL was used to generate visual representations of the RBD–ACE2 interface, highlighting the most relevant residues and interactions affected by the mutations.
 
-## Visualization Strategy
+### Visualization Strategy
 
 Several images were prepared to clearly illustrate the role of key residues at the interface:
 
@@ -245,7 +245,7 @@ Several images were prepared to clearly illustrate the role of key residues at t
    - Residues with a destabilizing energetic effect were displayed in a separate view.
    - These residues highlight regions where mutations may reduce local stability or alter interactions at the interface.
 
-## Representation Details
+### Representation Details
 
 - The RBD–ACE2 interface was shown using surface and cartoon representations to clearly visualize contacts.
 - Relevant residues were displayed as sticks and colored according to their energetic classification.
@@ -259,13 +259,13 @@ Several images were prepared to clearly illustrate the role of key residues at t
 
 In this step, the mutations of SARS-CoV-2 RBD variants (Alpha, Beta, Delta) were modeled using **PyMOL** to generate structures with replaced side chains for energy analysis.
 
-## Known RBD Mutations by Variant
+### Known RBD Mutations by Variant
 
 - **Alpha (B.1.1.7):** N501Y, A570D, P681H
 - **Beta (B.1.351):** K417N, E484K, N501Y
 - **Delta (B.1.617.2):** L452R, T478K, P681R
 
-## Mutations Used in This Step
+### Mutations Used in This Step
 
 Only the mutations present in our dataset were modeled:
 
@@ -275,7 +275,7 @@ Only the mutations present in our dataset were modeled:
 - **Beta:** N501Y → Asparagine (N) to Tyrosine (Y), same as in Alpha.
 - **Delta:** T478K → Threonine (T) to Lysine (K), introducing a positive charge in the binding interface.
 
-## Procedure in PyMOL
+### Procedure in PyMOL
 
 1. Load the wild-type RBD structure.
 2. Use the **Mutagenesis Wizard** to replace each residue with the corresponding mutant, selecting the optimal rotamer.
