@@ -242,7 +242,7 @@ Several images were prepared to clearly illustrate the role of key residues at t
      - **Moderate stabilizers:** orange  
 
 4. **Destabilizing Residues**  
-   - Residues with a destabilizing energetic effect were displayed in a separate view.
+   - Residues with a destabilizing energetic effect were displayed in a separate view (yellow)
    - These residues highlight regions where mutations may reduce local stability or alter interactions at the interface.
 
 ### Representation Details
